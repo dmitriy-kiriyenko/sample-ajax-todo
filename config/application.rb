@@ -39,6 +39,19 @@ module TodoInterview
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    config.generators do |g|
+      g.assets false
+      g.helper false
+      g.test_framework :rspec,
+                        fixture: true,
+                        view_specs: false,
+                        routing_specs: false,
+                        controller_specs: false,
+                        helper: false
+      g.integration_tool :rspec
+      g.fixture_replacement :factory_girl, :dir => "spec/factories"
+    end
+
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
 
