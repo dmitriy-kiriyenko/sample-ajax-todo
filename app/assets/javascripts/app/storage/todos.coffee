@@ -22,10 +22,10 @@ class Todos
     if options.title then @update id, options else @destroy id, options
 
   toggle: (id) ->
-    _(@findItem id).tap (item)-> item.update completed: !item.completed
+    _(@findItem id).tap (item)-> item.toggle()
 
   switchPriority: (id) ->
-    _(@findItem id).tap (item)-> item.update priority: (item.priority + 1) % 3
+    _(@findItem id).tap (item)-> item.switchPriority()
 
   findItem: (id) ->
     _(@items).find (item) -> item.id == id
