@@ -14,36 +14,41 @@ class Todos
         @fetched = true
         $(@).trigger 'change'
 
-  _remoteCreate: (item) ->
-    _($.ajax type: 'POST', url: '/todos.json', data: {todo: item.attributes()}).tap (request)=>
-      request.done => $(@).trigger 'change'
+  _remoteCreate: (options) ->
+    _($.ajax type: 'POST', url: '/todos.json', data: {todo: options}).tap (request)=>
+      request.done (data)=>
+        @items.push new Todo data
+        $(@).trigger 'change'
 
-  _remoteUpdate: (item) ->
-    _($.ajax type: 'PUT', url: "/todos/#{item.id}.json", data: {todo: item.attributes()}).tap (request)=>
-      request.done => $(@).trigger 'change'
+  _remoteUpdate: (item, options) ->
+    _($.ajax type: 'PUT', url: "/todos/#{item.id}.json", data: {todo: options}).tap (request)=>
+      request.done (data)=>
+        item.update options
+        $(@).trigger 'change'
 
-  create: (options) -> 
-    _(new Todo(options)).tap (item)=>
-      @items.push item
-      @_remoteCreate item
+  _remoteDelete: (item) ->
+    _($.ajax type: 'DELETE', url: "/todos/#{item.id}.json").tap (request)=>
+      request.done (data)=>
+        @items = _(@items).reject (i)-> i.id == item.id
+        $(@).trigger 'change'
+
+  create: (options) ->
+    @_remoteCreate options
 
   updateOrDelete: (id, options) ->
     if options.title then @update id, options else @destroy id, options
 
   update: (id, options) ->
     _(@findItem id).tap (item)=>
-      item.update options
-      @_remoteUpdate item
+      @_remoteUpdate item, options
 
   toggle: (id) ->
     _(@findItem id).tap (item)=>
-      item.toggle()
-      @_remoteUpdate item
+      @_remoteUpdate item, item.toggledAttrs()
 
   switchPriority: (id) ->
     _(@findItem id).tap (item)=>
-      item.switchPriority()
-      @_remoteUpdate item
+      @_remoteUpdate item, item.switchedPriorityAttrs()
 
   findItem: (id) ->
     _(@items).find (item) -> item.id == id
@@ -55,14 +60,12 @@ class Todos
     @deleteAll (item)-> item.completed
 
   deleteAll: (condition)->
-    i = @itemsCount()
-    (@items.splice i, 1 if condition @items[i]) while i--
+    @_remoteDelete(item) for item in @items when condition item
     @
 
   forceStatus: (completed)->
     _(@items).each (item) =>
-      item.update completed: completed
-      @_remoteUpdate item
+      @_remoteUpdate item, item.withStatusAttrs(completed)
 
   itemsCount: -> @items.length
   activeItems: -> _(@items).filter (item)-> !item.completed

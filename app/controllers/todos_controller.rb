@@ -16,4 +16,10 @@ class TodosController < ApplicationController
     @todo.update_attributes params[:todo]
     respond_with @todo
   end
+
+  def destroy
+    @todo = Todo.find params[:id]
+    @todo.destroy
+    respond_with @todo
+  end
 end

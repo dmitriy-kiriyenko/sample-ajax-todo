@@ -11,11 +11,14 @@ class Todo
     @priority = priority if priority?
     @
 
-  toggle: ->
-    @update completed: !@completed
+  toggledAttrs: ->
+    completed: !@completed
 
-  switchPriority: ->
-    @update priority: (@priority + 1) % 3
+  switchedPriorityAttrs: ->
+    priority: (@priority + 1) % 3
+
+  withStatusAttrs: (completed)->
+    completed: completed
 
   attributes: ->
     title: @title,
