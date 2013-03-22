@@ -256,6 +256,39 @@ label[for='toggle-all'] {
   text-decoration: line-through;
 }
 
+#todo-list li .priority {
+  position: absolute;
+  top: 0;
+  right: 40px;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  margin: auto 0;
+  font-weight: bold;
+  font-size: 22px;
+
+  &.high {
+    color: #a62a2a;
+    &:after {
+      content: '\21D1';
+    }
+  }
+
+  &.normal {
+    color: #ee8833;
+    &:after {
+      content: '=';
+    }
+  }
+
+  &.low {
+    color: #385e0f;
+    &:after {
+      content: '\21D3';
+    }
+  }
+}
+
 #todo-list li .destroy {
   display: none;
   position: absolute;
@@ -267,6 +300,12 @@ label[for='toggle-all'] {
   margin: auto 0;
   font-size: 22px;
   color: #a88a8a;
+}
+
+#todo-list li .destroy:hover,
+#todo-list li .toggle:hover,
+#todo-list li .priority:hover,
+#toggle-all {
   -webkit-transition: all 0.2s;
   -moz-transition: all 0.2s;
   -ms-transition: all 0.2s;
@@ -274,14 +313,24 @@ label[for='toggle-all'] {
   transition: all 0.2s;
 }
 
-#todo-list li .destroy:hover {
-  text-shadow: 0 0 1px #000,
-  0 0 10px rgba(199, 107, 107, 0.8);
+#todo-list li .destroy:hover,
+#todo-list li .toggle:hover,
+#todo-list li .priority:hover {
+  text-shadow: 0 0 1px #000, 0 0 10px rgba(199, 107, 107, 0.8);
   -webkit-transform: scale(1.3);
   -moz-transform: scale(1.3);
   -ms-transform: scale(1.3);
   -o-transform: scale(1.3);
   transform: scale(1.3);
+}
+
+#toggle-all:hover {
+  text-shadow: 0 0 1px #000, 0 0 10px rgba(199, 107, 107, 0.8);
+  -webkit-transform: scale(1.3), rotate(90deg);
+  -moz-transform: scale(1.3), rotate(90deg);
+  -ms-transform: scale(1.3), rotate(90deg);
+  -o-transform: scale(1.3), rotate(90deg);
+  transform: scale(1.3), rotate(90deg);
 }
 
 #todo-list li .destroy:after {
