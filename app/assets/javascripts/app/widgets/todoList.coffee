@@ -69,7 +69,7 @@ class TodoList
 
     if event.which != enterKey or not value then return
 
-    todos.create id: uuid(), title: value, completed: false
+    todos.create id: uuid(), title: value
 
     input.val ''
     @render()
