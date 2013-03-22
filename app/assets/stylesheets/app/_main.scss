@@ -36,6 +36,15 @@ body {
   font-smoothing: antialiased;
 }
 
+nav.auth {
+  position: absolute;
+  right: 20px;
+  top: 5px;
+  &, & a {
+    color: #a6a6a6;
+  }
+}
+
 #todoapp {
   background: #fff;
   background: rgba(255, 255, 255, 0.9);
