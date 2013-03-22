@@ -14,24 +14,36 @@ class Todos
         @fetched = true
         $(@).trigger 'change'
 
+  _remoteCreate: (item) ->
+    _($.ajax type: 'POST', url: '/todos.json', data: {todo: item.attributes()}).tap (request)=>
+      request.done => $(@).trigger 'change'
+
+  _remoteUpdate: (item) ->
+    _($.ajax type: 'PUT', url: "/todos/#{item.id}.json", data: {todo: item.attributes()}).tap (request)=>
+      request.done => $(@).trigger 'change'
+
   create: (options) -> 
     _(new Todo(options)).tap (item)=>
-      _($.ajax type: 'POST', url: '/todos.json', data: {todo: options}).tap (request)=>
-        request.done (attrs)=>
-          @items.push(new Todo attrs)
-          $(@).trigger 'change'
-
-  update: (id, options) ->
-    _(@findItem id).tap (item)-> item.update options
+      @items.push item
+      @_remoteCreate item
 
   updateOrDelete: (id, options) ->
     if options.title then @update id, options else @destroy id, options
 
+  update: (id, options) ->
+    _(@findItem id).tap (item)=>
+      item.update options
+      @_remoteUpdate item
+
   toggle: (id) ->
-    _(@findItem id).tap (item)-> item.toggle()
+    _(@findItem id).tap (item)=>
+      item.toggle()
+      @_remoteUpdate item
 
   switchPriority: (id) ->
-    _(@findItem id).tap (item)-> item.switchPriority()
+    _(@findItem id).tap (item)=>
+      item.switchPriority()
+      @_remoteUpdate item
 
   findItem: (id) ->
     _(@items).find (item) -> item.id == id
@@ -48,8 +60,9 @@ class Todos
     @
 
   forceStatus: (completed)->
-    console.log completed
-    _(@items).each (item) -> item.update completed: completed
+    _(@items).each (item) =>
+      item.update completed: completed
+      @_remoteUpdate item
 
   itemsCount: -> @items.length
   activeItems: -> _(@items).filter (item)-> !item.completed

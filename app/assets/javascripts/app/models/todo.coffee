@@ -18,9 +18,9 @@ class Todo
     @update priority: (@priority + 1) % 3
 
   attributes: ->
-    title: title,
-    completed: completed,
-    priority: priority
+    title: @title,
+    completed: @completed,
+    priority: @priority
 
   priorityCodes: -> ['low', 'normal', 'high']
   priorityString: -> @priorityCodes()[@priority]
