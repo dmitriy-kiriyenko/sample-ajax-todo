@@ -3,7 +3,6 @@
 
 todos = app.storage.todos
 pluralize = app.helpers.pluralize
-uuid = app.helpers.uuid
 todoTemplate = app.templates['todos/item']
 footerTemplate = app.templates['footer/show']
 enterKey = 13
@@ -55,15 +54,12 @@ class TodoList
 
   toggleAll: (event)->
     todos.forceStatus $(event.target).prop 'checked'
-    @render()
 
   clearCompleted: (event)->
     todos.destroyCompleted()
-    @render()
 
   toggle: (event) ->
     todos.toggle @getId(event.target)
-    @render()
 
   create: (event) ->
     input = $(event.target)
@@ -88,14 +84,11 @@ class TodoList
     input = $(event.target)
     value = $.trim input.removeClass('editing').val()
     todos.updateOrDelete(@getId(input), title: value)
-    @render()
 
   switchPriority: (event) ->
     todos.switchPriority @getId event.target
-    @render()
 
   destroy: (event) ->
     todos.destroy @getId event.target
-    @render()
 
 app.widgets.TodoList = TodoList
