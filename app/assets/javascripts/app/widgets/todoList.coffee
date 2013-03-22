@@ -74,7 +74,6 @@ class TodoList
     todos.create id: uuid(), title: value
 
     input.val ''
-    @render()
 
   getId: (element) ->
     $(element).closest('li').data('id')

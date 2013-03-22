@@ -15,7 +15,11 @@ class Todos
         $(@).trigger 'change'
 
   create: (options) -> 
-    _(new Todo(options)).tap (item)=> @items.push(item)
+    _(new Todo(options)).tap (item)=>
+      _($.ajax type: 'POST', url: '/todos.json', data: {todo: options}).tap (request)=>
+        request.done (attrs)=>
+          @items.push(new Todo attrs)
+          $(@).trigger 'change'
 
   update: (id, options) ->
     _(@findItem id).tap (item)-> item.update options
