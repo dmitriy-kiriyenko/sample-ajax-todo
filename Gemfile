@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.13'
 
 gem 'pg'
+gem 'thin'
 
 
 # Gems used only for assets and not required
@@ -22,5 +23,4 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'meta_request'
   gem 'quiet_assets'
-  gem 'thin'
 end
