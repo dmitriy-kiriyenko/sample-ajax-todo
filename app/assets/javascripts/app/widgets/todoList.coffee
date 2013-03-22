@@ -13,7 +13,7 @@ class TodoList
   constructor: (root)->
     @cacheElements(root)
     @bindEvents()
-    @render()
+    @render() if todos.fetched
 
   cacheElements: (root)->
     @root            = $(root)
@@ -26,8 +26,10 @@ class TodoList
     @clearAllButton  = @root.find('#clear-completed')
 
   bindEvents: ->
-    @newItem.on         'keyup'                        , (e)=> @create(e)
-    @toggleAllButton.on 'change'                       , (e)=> @toggleAll(e)
+    $(todos).on         'change'  ,                         => @render()
+
+    @newItem.on         'keyup'   ,                      (e)=> @create(e)
+    @toggleAllButton.on 'change'  ,                      (e)=> @toggleAll(e)
     @itemList.on        'change'  , '.toggle'          , (e)=> @toggle(e)
     @itemList.on        'dblclick', 'label'            , (e)=> @edit(e)
     @itemList.on        'keypress', '.edit'            , (e)=> @blurOnEnter(e)

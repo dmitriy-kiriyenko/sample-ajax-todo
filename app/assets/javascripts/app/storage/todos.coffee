@@ -8,9 +8,11 @@ class Todos
     @fetch()
 
   fetch: -> 
-    @items = [new Todo(id: 1, title: 'Make a simple todo', priority: 0, completed: true),
-              new Todo(id: 2, title: 'Css it',             priority: 1, completed: false),
-              new Todo(id: 3, title: 'Earn lots of money', priority: 2, completed: false)]
+    _($.ajax type: 'GET', url: '/todos.json').tap (request)=>
+      request.done (data)=>
+        @items = _(data).map (attrs)-> new Todo attrs
+        @fetched = true
+        $(@).trigger 'change'
 
   create: (options) -> 
     _(new Todo(options)).tap (item)=> @items.push(item)
