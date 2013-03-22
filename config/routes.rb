@@ -1,3 +1,3 @@
 TodoInterview::Application.routes.draw do
-  root to: 'todos#index'
+  root to: 'todo_list#show'
 end
